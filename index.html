@@ -154,15 +154,15 @@
                 if (check() == num) {
                     score += 1;
                 } else {
+                    Swal.fire({
+                        title: "GAME OVER!!! The score is "+ score,
+                        text: "Yours: " + check() + ", Answer: " + num,
+                        icon: "error",
+                        allowOutsideClick: false
+                    });
                     cont = false;
                 }
             }
-
-            Swal.fire({
-                title: "The score is "+ score,
-                icon: "success",
-                allowOutsideClick: false
-            });
             document.getElementById('myInput').style.visibility = "hidden";
             document.getElementById('myButton').style.visibility = "hidden";
         }
