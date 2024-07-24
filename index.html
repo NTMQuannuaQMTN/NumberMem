@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Number Memory Testing</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        ::-webkit-scrollbar {
+            display: none
+        }
+
+        .play {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        a {
+            align-self: center;
+            background-color: rgb(176, 178, 34);
+            border-radius: 20%;
+            padding: 10px;
+            font-size: 3vh;
+            border: 2px solid rgb(30, 30, 30);
+        }
+
+        a:hover {
+            background-color: lightsalmon;
+        }
+
+        body {
+            background-color: lightcoral;
+        }
+
+        .troll {
+            margin-top: 100vw;
+            text-align: center;
+        }
+
+        header {
+            background-color: #E74646;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+        }
+
+        .header-left,
+        .header-right {
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+
+        header h1 {
+            font-size: 6vh;
+        }
+
+        hr {
+            align-items: center;
+        }
+
+        input {
+            visibility: hidden;
+            width: fit-content;
+            margin: 10px;
+            padding: 5px;
+        }
+
+        #myInput {
+            width: 100%;
+            padding: 5px;
+            font-size: 3vh;
+            text-align: center;
+        }
+
+        #myButton {
+            background-color: rgb(176, 178, 34);
+            color: whitesmoke;
+            padding: 10px;
+            font-size: 3vh;
+        }
+
+        img {
+            width: 30vw;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            gap: 10vw;
+            justify-content: center;
+            margin-bottom: 10vh;
+        }
+
+        @media screen and (max-width: 768px) {
+            header h1 {
+                font-size: 6vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-left">
+            <h1>MANH QUAN</h1>
+        </div>
+        <div class="header-right">
+            <h1>THE WEB</h1>
+        </div>
+    </header>
+    <h1 style="text-align: center;">NUMBER MEMORY CHALLENGE</h1>
+    <div class="play"><a onclick="play()">Play game</a></div>
+    <p style="text-align: center; font-size: 3vh;" id="level">Score: <span id="curlv">0</span></h1>
+    <form name="input" onsubmit="return false;">
+        <div class="ans" style="width:95vw;">
+            <input type="text" id="myInput" placeholder="Enter the number shown">
+        </div>
+        <input type="submit" id="myButton" onclick="check();">
+    </form>
+    <audio id="audio" style="display:none;" src="vers.mp3" controls autoplay loop>
+    <script>
+        let audio = document.querySelector('audio');
+        let c = false;
+
+        document.getElementById('myButton').addEventListener("click", function () {
+            c = true;
+        });
+
+        async function play() {
+            audio.play();
+            document.getElementById('myInput').style.visibility = "visible";
+            document.getElementById('myButton').style.visibility = "visible";
+            let score = 0;
+            let cont = true;
+
+            while (cont) {
+                document.getElementById('myInput').value = "";
+                c = false;
+                document.getElementById("curlv").textContent = score;
+                let num = Math.floor(Math.random() * 9 * 10 ** score) + 10 ** score;
+
+                await Swal.fire({
+                    title: "The number is " + num,
+                    showConfirmButton: false,
+                    timer: 1000,
+                    allowOutsideClick: false
+                });
+
+                await waitForClick();
+
+                if (check() == num) {
+                    score += 1;
+                } else {
+                    cont = false;
+                }
+            }
+
+            Swal.fire({
+                title: "The score is "+ score,
+                icon: "success",
+                allowOutsideClick: false
+            });
+            document.getElementById('myInput').style.visibility = "hidden";
+            document.getElementById('myButton').style.visibility = "hidden";
+        }
+
+        function check() {
+            let res = document.forms["input"]["myInput"].value;
+            return res;
+        }
+
+        function waitForClick() {
+            return new Promise(resolve => {
+                const interval = setInterval(() => {
+                    if (c) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, 100);
+            });
+        }
+    </script>
+</body>
+
+</html>
